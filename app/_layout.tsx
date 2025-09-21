@@ -1,24 +1,22 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { AuthProvider } from '../src/contexts/AuthContext';
+import { ScheduleProvider } from '../src/contexts/ScheduleContext';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
+// Root layout ที่ครอบแอปทั้งหมด
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    // ครอบด้วย Provider เพื่อให้ทุกหน้าจอเข้าถึงข้อมูลได้
+    <AuthProvider>
+      <ScheduleProvider>
+        <Stack screenOptions={{ headerStyle: { backgroundColor: '#f0f0f0' }}}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="add-activity"
+            options={{ presentation: 'modal', title: 'Add New Activity' }}
+          />
+          <Stack.Screen name="auth" options={{ headerShown: false }} />
+        </Stack>
+      </ScheduleProvider>
+    </AuthProvider>
   );
 }
